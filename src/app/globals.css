@@ -66,3 +66,322 @@ button {
   -ms-user-select: none;
   user-select: none;
 }
+
+/* tldraw canvas styling */
+.tl-container {
+  background-color: #F2F2F2 !important;
+}
+
+/* Additional tldraw background overrides */
+.tl-canvas {
+  background-color: #F2F2F2 !important;
+}
+
+.tl-background {
+  background-color: #F2F2F2 !important;
+}
+
+/* Override any tldraw internal background styles */
+[data-tl-container] {
+  background-color: #F2F2F2 !important;
+}
+
+/* tldraw selection and hover color overrides */
+.tl-selected,
+.tl-shape.tl-selected,
+.tl-shape[data-selected="true"] {
+  outline-color: #0C8CE9 !important;
+  border-color: #0C8CE9 !important;
+}
+
+.tl-hovered,
+.tl-shape.tl-hovered,
+.tl-shape:hover {
+  outline-color: #0C8CE9 !important;
+  border-color: #0C8CE9 !important;
+}
+
+/* Target selection handles and outlines */
+.tl-selection-outline,
+.tl-selection-bg,
+.tl-selection-fg {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+}
+
+/* Target hover states for shapes */
+.tl-shape:hover .tl-selection-outline,
+.tl-shape:hover .tl-selection-bg,
+.tl-shape:hover .tl-selection-fg {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+  stroke-width: 1px !important;
+}
+
+/* Unify edge-hover with full hover: same thin blue outline */
+.tl-shape.tl-hovered .tl-selection-outline,
+.tl-shape.tl-hovered .tl-selection-bg,
+.tl-shape.tl-hovered .tl-selection-fg,
+.tl-shape[data-tl-hovered="true"] .tl-selection-outline,
+.tl-shape[data-tl-hovered="true"] .tl-selection-bg,
+.tl-shape[data-tl-hovered="true"] .tl-selection-fg {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+  stroke-width: 1px !important;
+}
+
+/* Target selected shapes */
+.tl-shape.tl-selected .tl-selection-outline,
+.tl-shape.tl-selected .tl-selection-bg,
+.tl-shape.tl-selected .tl-selection-fg {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+}
+
+/* Additional tldraw selection overrides */
+.tl-selection-container,
+.tl-selection-container * {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+}
+
+/* Target selection handles */
+.tl-selection-handle,
+.tl-selection-handle * {
+  fill: #0C8CE9 !important;
+  stroke: #0C8CE9 !important;
+}
+
+/* Target selection box */
+.tl-selection-box {
+  stroke: #0C8CE9 !important;
+  fill: rgba(12, 140, 233, 0.1) !important;
+}
+
+/* Target any element with selection-related attributes */
+[data-selected="true"],
+[data-tl-selected="true"] {
+  outline-color: #0C8CE9 !important;
+  border-color: #0C8CE9 !important;
+}
+
+/* Target hover states for any tldraw element */
+[data-tl-hovered="true"],
+.tl-hovered {
+  outline-color: #0C8CE9 !important;
+  border-color: #0C8CE9 !important;
+}
+
+/* Override any inline styles that might set selection colors */
+[style*="stroke"][style*="blue"],
+[style*="fill"][style*="blue"] {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+}
+
+/* Additional comprehensive tldraw overrides */
+.tl-ui,
+.tl-ui * {
+  --color-selection: #0C8CE9 !important;
+  --color-selection-stroke: #0C8CE9 !important;
+  --color-selection-fill: #0C8CE9 !important;
+}
+
+/* Target any SVG elements that might be selection indicators */
+svg [stroke*="blue"],
+svg [fill*="blue"] {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+}
+
+/* Target canvas selection indicators */
+canvas + div [stroke*="blue"],
+canvas + div [fill*="blue"] {
+  stroke: #0C8CE9 !important;
+  fill: #0C8CE9 !important;
+}
+
+/* Override any CSS custom properties that might control selection color */
+:root {
+  --tl-color-selection: #0C8CE9 !important;
+  --tl-color-selection-stroke: #0C8CE9 !important;
+  --tl-color-selection-fill: #0C8CE9 !important;
+}
+
+/* Ensure the main canvas area has the correct background */
+.tl-container > div {
+  background-color: #F2F2F2 !important;
+}
+
+/* More specific tldraw overrides */
+.tl-container .tl-canvas-container {
+  background-color: #F2F2F2 !important;
+}
+
+.tl-container .tl-canvas-container > div {
+  background-color: #F2F2F2 !important;
+}
+
+/* Target the actual canvas element */
+canvas {
+  background-color: #F2F2F2 !important;
+}
+
+/* Override any inline styles that tldraw might apply */
+[style*="background"] {
+  background-color: #F2F2F2 !important;
+}
+
+/* Custom rectangle styling: sharp corners, no stroke */
+.tl-geo-shape,
+.tl-geo-shape rect,
+.tl-geo-shape path {
+  border-radius: 0 !important;
+  fill: #D9D9D9 !important;
+  stroke: none !important;
+}
+
+/* Target rectangle shapes specifically */
+.tl-shape[data-shape-type="geo"] {
+  border-radius: 0 !important;
+}
+
+.tl-shape[data-shape-type="geo"] rect,
+.tl-shape[data-shape-type="geo"] path {
+  fill: #D9D9D9 !important;
+  stroke: none !important;
+}
+/* Ensure full rectangle area hovers and shows the same outline */
+.tl-shape[data-shape-type="geo"] rect,
+.tl-shape[data-shape-type="geo"] path,
+.tl-geo-shape rect,
+.tl-geo-shape path {
+  pointer-events: all !important;
+}
+/* Hover outline on rectangles (center or edge hover) */
+.tl-shape[data-shape-type="geo"]:hover rect,
+.tl-shape[data-shape-type="geo"]:hover path,
+.tl-shape[data-shape-type="geo"].tl-hovered rect,
+.tl-shape[data-shape-type="geo"].tl-hovered path,
+.tl-shape[data-shape-type="geo"][data-tl-hovered="true"] rect,
+.tl-shape[data-shape-type="geo"][data-tl-hovered="true"] path {
+  stroke: #0C8CE9 !important;
+  stroke-width: 1px !important;
+}
+
+/* Custom frame styling - white frames */
+.tl-frame-shape,
+.tl-shape[data-shape-type="frame"] {
+  fill: white !important;
+  border: none !important;
+  cursor: move !important;
+  pointer-events: all !important;
+}
+
+.tl-frame-shape rect,
+.tl-frame-shape path,
+.tl-shape[data-shape-type="frame"] rect,
+.tl-shape[data-shape-type="frame"] path {
+  fill: white !important;
+  stroke: none !important;
+  cursor: move !important;
+  pointer-events: all !important;
+}
+
+/* Make frame backgrounds fully interactive */
+.tl-frame-shape,
+.tl-shape[data-shape-type="frame"] {
+  pointer-events: all !important;
+  user-select: none !important;
+}
+/* Ensure entire frame area counts as hover and shows the same outline */
+.tl-shape[data-shape-type="frame"] rect,
+.tl-shape[data-shape-type="frame"] path {
+  pointer-events: all !important;
+}
+/* Hover outline on frames (center or edge hover) */
+.tl-shape[data-shape-type="frame"]:hover rect,
+.tl-shape[data-shape-type="frame"]:hover path,
+.tl-shape[data-shape-type="frame"].tl-hovered rect,
+.tl-shape[data-shape-type="frame"].tl-hovered path,
+.tl-shape[data-shape-type="frame"][data-tl-hovered="true"] rect,
+.tl-shape[data-shape-type="frame"][data-tl-hovered="true"] path {
+  stroke: #0C8CE9 !important;
+  stroke-width: 1px !important;
+  fill: white !important;
+}
+
+/* Hide frame borders completely */
+.tl-frame-shape .tl-frame-border,
+.tl-shape[data-shape-type="frame"] .tl-frame-border {
+  display: none !important;
+}
+
+/* Ensure frames are selectable and draggable */
+.tl-frame-shape:hover,
+.tl-shape[data-shape-type="frame"]:hover {
+  fill: #f8f8f8 !important;
+}
+
+/* Make sure frame backgrounds are clickable */
+.tl-frame-shape rect,
+.tl-shape[data-shape-type="frame"] rect {
+  pointer-events: all !important;
+  cursor: move !important;
+}
+
+/* Ensure any SVG background under a frame is white, even if nested groups */
+.tl-shape[data-shape-type="frame"] svg [fill],
+.tl-shape[data-shape-type="frame"] svg [style*="fill"],
+.tl-shape[data-shape-type="frame"] [data-tl-segment],
+.tl-shape[data-shape-type="frame"] [data-tl-geometry] {
+  fill: white !important;
+  stroke: none !important;
+}
+
+/* Keep canvas background unchanged (already set to #F2F2F2 above) */
+
+/* Override any tldraw default frame behavior */
+.tl-frame-shape[data-shape-type="frame"] {
+  pointer-events: all !important;
+  cursor: move !important;
+}
+
+/* Frame label: text only, no background; blue when hovered/selected */
+/* Remove any background or box shadow from the label hit area */
+.tl-frame-heading .tl-frame-heading-hit-area {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Ensure the label text itself has no background and inherits color */
+.tl-frame-heading .tl-frame-label {
+  background-color: transparent !important;
+  text-shadow: none !important;
+  color: var(--tl-color-text) !important;
+}
+
+/* Blue when frame is hovered */
+.tl-shape[data-shape-type="frame"]:hover .tl-frame-heading .tl-frame-label,
+.tl-shape[data-shape-type="frame"].tl-hovered .tl-frame-heading .tl-frame-label,
+.tl-shape[data-shape-type="frame"][data-tl-hovered="true"] .tl-frame-heading .tl-frame-label {
+  color: var(--tl-color-selected) !important; /* matches outline blue */
+}
+
+/* Blue when frame is selected */
+.tl-shape[data-shape-type="frame"][data-isselected="true"] .tl-frame-heading .tl-frame-label,
+.tl-shape[data-isselected="true"][data-shape-type="frame"] .tl-frame-heading .tl-frame-label {
+  color: var(--tl-color-selected) !important;
+}
+
+/* Also blue when our DOM state flags are present (hover/selected at edge) */
+.tl-shape[data-shape-type="frame"][data-lp-hover="true"] .tl-frame-heading .tl-frame-label,
+.tl-shape[data-shape-type="frame"][data-lp-selected="true"] .tl-frame-heading .tl-frame-label {
+  color: var(--tl-color-selected) !important;
+}
+
+/* While editing, remove the filled editing background to keep text-only look */
+.tl-frame-heading .tl-frame-label__editing {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
