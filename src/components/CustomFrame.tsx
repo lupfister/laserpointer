@@ -151,60 +151,6 @@ const CustomFrame: React.FC = () => {
     }
   }, [editor])
 
-  // Sync hovered / selected state to DOM attributes on frame wrappers for CSS targeting
-  useEffect(() => {
-    if (!editor) return
-
-    const container = editor.getContainer()
-
-    const updateDomState = () => {
-      // Clear previous flags
-      const allFrameEls = container.querySelectorAll('.tl-shape[data-shape-type="frame"]')
-      allFrameEls.forEach((el) => {
-        ;(el as HTMLElement).removeAttribute('data-lp-hover')
-        ;(el as HTMLElement).removeAttribute('data-lp-selected')
-      })
-
-      // Hovered frame
-      const hoveredId = (editor as any).getHoveredShapeId?.()
-      if (hoveredId) {
-        const hoveredEl = container.querySelector(`[data-shape-id="${hoveredId}"]`)
-        if (
-          hoveredEl &&
-          (hoveredEl as HTMLElement).getAttribute('data-shape-type') === 'frame'
-        ) {
-          ;(hoveredEl as HTMLElement).setAttribute('data-lp-hover', 'true')
-        }
-      }
-
-      // Selected frames
-      const selectedIds = editor.getSelectedShapeIds()
-      for (const id of selectedIds) {
-        const selEl = container.querySelector(`[data-shape-id="${id}"]`)
-        if (selEl && (selEl as HTMLElement).getAttribute('data-shape-type') === 'frame') {
-          ;(selEl as HTMLElement).setAttribute('data-lp-selected', 'true')
-        }
-      }
-    }
-
-    // Listen to store changes (selection, hover, etc.)
-    const unsubscribe = editor.store.listen(updateDomState)
-
-    // Also respond to pointer moves for immediate hover updates
-    const handlePointerMove = () => updateDomState()
-    const handlePointerLeave = () => updateDomState()
-    container.addEventListener('pointermove', handlePointerMove, { capture: true })
-    container.addEventListener('pointerleave', handlePointerLeave, { capture: true })
-
-    // Initial sync
-    updateDomState()
-
-    return () => {
-      unsubscribe()
-      container.removeEventListener('pointermove', handlePointerMove, { capture: true } as any)
-      container.removeEventListener('pointerleave', handlePointerLeave, { capture: true } as any)
-    }
-  }, [editor])
 
   return null
 }

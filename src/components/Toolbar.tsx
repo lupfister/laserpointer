@@ -14,6 +14,23 @@ const Toolbar: React.FC<ToolbarProps> = ({
   const editor = useEditor()
   const [currentTool, setCurrentTool] = useState('select')
   const [showHelpModal, setShowHelpModal] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Trigger animation on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true)
+    }, 100) // Small delay to ensure smooth animation
+    
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Cleanup pointer mode on unmount
+  useEffect(() => {
+    return () => {
+      ;(window as any).isPointerMode = false
+    }
+  }, [])
 
   useEffect(() => {
     if (!editor) return
@@ -21,9 +38,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
     const updateCurrentTool = () => {
       const tool = editor.getCurrentTool()?.id || 'select'
       
-      // If we're using the geo tool, keep rectangle selected
-      if (tool === 'geo') {
+      // If we're using the custom rectangle tool, keep rectangle selected
+      if (tool === 'customRectangle') {
         setCurrentTool('rectangle')
+      } else if (tool === 'draw' && (window as any).isPointerMode) {
+        // If we're using draw tool but in pointer mode, keep pointer selected
+        setCurrentTool('pointer')
       } else {
         // For other tools, update normally
         setCurrentTool(tool)
@@ -63,15 +83,22 @@ const Toolbar: React.FC<ToolbarProps> = ({
     if (!editor) return
     
     if (tool === 'rectangle') {
-      // For rectangle, use the geo tool
-      editor.setCurrentTool('geo')
+      // For rectangle, use the custom rectangle tool
+      editor.setCurrentTool('customRectangle')
       // Set the current tool state to rectangle for UI purposes
       setCurrentTool('rectangle')
     } else if (tool === 'frame') {
       // For frame tool
       editor.setCurrentTool('frame')
       setCurrentTool(tool)
+    } else if (tool === 'pointer') {
+      // For pointer tool, use the draw tool but with red color
+      ;(window as any).isPointerMode = true
+      editor.setCurrentTool('draw')
+      setCurrentTool('pointer')
     } else {
+      // Reset pointer mode for all other tools
+      ;(window as any).isPointerMode = false
       editor.setCurrentTool(tool)
       setCurrentTool(tool)
     }
@@ -108,6 +135,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
           event.preventDefault()
           handleSelectTool('text')
           break
+        case 'p':
+          event.preventDefault()
+          handleSelectTool('pointer')
+          break
         case 'delete':
         case 'backspace':
           event.preventDefault()
@@ -129,7 +160,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
   const baseItemClasses = 'rounded cursor-pointer focus:outline-none'
 
   return (
-    <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 z-50 ${className}`}>
+    <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 z-50 transition-all duration-700 ease-out ${
+      isVisible 
+        ? 'translate-y-0 opacity-100' 
+        : 'translate-y-full opacity-0'
+    } ${className}`}>
       <div
         className="bg-[#2c2c2c] relative rounded-[12px] px-2 py-2 inline-flex items-center overflow-hidden"
         role="toolbar"
@@ -204,14 +239,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
           <div className="flex items-center">
             <button
-              className={`${baseItemClasses} size-[32px] ${isActive('comment') ? 'bg-[#0C8CE9]' : 'hover:bg-[#434343]'}`}
-              aria-label="Comment"
-              title="Comment"
-              onClick={() => handleSelectTool('comment')}
+              className={`${baseItemClasses} size-[32px] ${isActive('pointer') ? 'bg-[#0C8CE9]' : 'hover:bg-[#434343]'}`}
+              aria-label="Pointer (P)"
+              title="Pointer (P)"
+              onClick={() => handleSelectTool('pointer')}
             >
-              <img src="/comment.svg" alt="Comment" className="w-6 h-6 mx-auto" />
+              <img src="/pointer.svg" alt="Pointer" className="w-6 h-6 mx-auto" />
             </button>
-            <button className={`${baseItemClasses} h-[32px] w-[13px] flex items-center justify-center hover:bg-[#434343]`} aria-label="Comment options">
+            <button className={`${baseItemClasses} h-[32px] w-[13px] flex items-center justify-center hover:bg-[#434343]`} aria-label="Pointer options">
               <ChevronDown className="w-[11px] h-[11px] text-white" />
             </button>
           </div>

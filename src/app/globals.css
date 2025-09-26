@@ -41,6 +41,39 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   touch-action: manipulation;
+  cursor: url('/cursor-black.svg'), auto;
+}
+
+/* Ensure custom cursor persists throughout the application */
+* {
+  cursor: url('/cursor-black.svg'), auto !important;
+}
+
+/* Override tldraw cursor styles */
+.tl-container,
+.tl-container *,
+.tl-canvas,
+.tl-canvas *,
+.tl-ui,
+.tl-ui *,
+[data-tl-container],
+[data-tl-container] * {
+  cursor: url('/cursor-black.svg'), auto !important;
+}
+
+/* Specific overrides for interactive elements */
+button,
+.tlui-button,
+.tlui-button *,
+.tlui-icon-button,
+.tlui-icon-button * {
+  cursor: url('/cursor-black.svg'), auto !important;
+}
+
+/* Override any tldraw tool cursors */
+.tl-tool,
+.tl-tool * {
+  cursor: url('/cursor-black.svg'), auto !important;
 }
 
 #__next {
@@ -251,6 +284,17 @@ canvas {
   fill: #D9D9D9 !important;
   stroke: none !important;
 }
+
+/* Custom rectangle shape styling - sharp corners, no stroke */
+.tl-shape[data-shape-type="customRectangle"] {
+  border-radius: 0 !important;
+}
+
+.tl-shape[data-shape-type="customRectangle"] div {
+  border-radius: 0 !important;
+  border: none !important;
+  background-color: #D9D9D9 !important;
+}
 /* Ensure full rectangle area hovers and shows the same outline */
 .tl-shape[data-shape-type="geo"] rect,
 .tl-shape[data-shape-type="geo"] path,
@@ -299,13 +343,9 @@ canvas {
 .tl-shape[data-shape-type="frame"] path {
   pointer-events: all !important;
 }
-/* Hover outline on frames (center or edge hover) */
+/* Hover outline on frames - use default TLDR hover behavior */
 .tl-shape[data-shape-type="frame"]:hover rect,
-.tl-shape[data-shape-type="frame"]:hover path,
-.tl-shape[data-shape-type="frame"].tl-hovered rect,
-.tl-shape[data-shape-type="frame"].tl-hovered path,
-.tl-shape[data-shape-type="frame"][data-tl-hovered="true"] rect,
-.tl-shape[data-shape-type="frame"][data-tl-hovered="true"] path {
+.tl-shape[data-shape-type="frame"]:hover path {
   stroke: #0C8CE9 !important;
   stroke-width: 1px !important;
   fill: white !important;
@@ -358,30 +398,22 @@ canvas {
 .tl-frame-heading .tl-frame-label {
   background-color: transparent !important;
   text-shadow: none !important;
-  color: var(--tl-color-text) !important;
+  color: var(--tl-color-text);
 }
 
-/* Blue when frame is hovered */
-.tl-shape[data-shape-type="frame"]:hover .tl-frame-heading .tl-frame-label,
-.tl-shape[data-shape-type="frame"].tl-hovered .tl-frame-heading .tl-frame-label,
-.tl-shape[data-shape-type="frame"][data-tl-hovered="true"] .tl-frame-heading .tl-frame-label {
-  color: var(--tl-color-selected) !important; /* matches outline blue */
+/* No blue label on hover - removed as requested */
+
+/* Blue when frame is selected - use correct TLDR selection classes */
+.tl-shape[data-shape-type="frame"].tl-selected .tl-frame-heading .tl-frame-label,
+.tl-shape[data-shape-type="frame"][data-selected="true"] .tl-frame-heading .tl-frame-label {
+  color: #0C8CE9 !important;
 }
 
-/* Blue when frame is selected */
-.tl-shape[data-shape-type="frame"][data-isselected="true"] .tl-frame-heading .tl-frame-label,
-.tl-shape[data-isselected="true"][data-shape-type="frame"] .tl-frame-heading .tl-frame-label {
-  color: var(--tl-color-selected) !important;
-}
-
-/* Also blue when our DOM state flags are present (hover/selected at edge) */
-.tl-shape[data-shape-type="frame"][data-lp-hover="true"] .tl-frame-heading .tl-frame-label,
-.tl-shape[data-shape-type="frame"][data-lp-selected="true"] .tl-frame-heading .tl-frame-label {
-  color: var(--tl-color-selected) !important;
-}
 
 /* While editing, remove the filled editing background to keep text-only look */
 .tl-frame-heading .tl-frame-label__editing {
   background-color: transparent !important;
   box-shadow: none !important;
 }
+
+/* Glow effect for red pointer drawings - applied via JavaScript */

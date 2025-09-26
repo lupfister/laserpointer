@@ -4,6 +4,9 @@ import { Tldraw, TldrawUiMenuItem, useEditor, useValue } from '@tldraw/tldraw'
 import '@tldraw/tldraw/tldraw.css'
 import Toolbar from '@/components/Toolbar'
 import CustomFrame from '@/components/CustomFrame'
+import { CustomRectangleShapeUtil, customRectangleShapeProps } from '@/components/CustomRectangleShape'
+import { CustomRectangleTool } from '@/components/CustomRectangleTool'
+import RedDrawOverride from '@/components/RedDrawOverride'
 
 export default function Home() {
 
@@ -13,9 +16,11 @@ export default function Home() {
       {/* Main Canvas Area */}
       <div className="flex-1 relative">
         <Tldraw
-          persistenceKey="laserpointer-canvas"
+          persistenceKey="laserpointer-canvas-v2"
           hideUi
           className="w-full h-full"
+          shapeUtils={[CustomRectangleShapeUtil]}
+          tools={[CustomRectangleTool]}
           onMount={(editor) => {
             // Set initial tool
             editor.setCurrentTool('select')
@@ -89,6 +94,7 @@ export default function Home() {
         >
           <Toolbar />
           <CustomFrame />
+          <RedDrawOverride />
         </Tldraw>
       </div>
     </div>
