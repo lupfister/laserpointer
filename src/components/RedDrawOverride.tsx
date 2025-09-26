@@ -35,7 +35,7 @@ const RedDrawOverride: React.FC = () => {
               // Check if this shape should already be faded out based on creation time
               const shapeCreatedAt = shape.meta?.pointerCreatedAt || Date.now()
               const now = Date.now()
-              const timeSinceCreation = now - shapeCreatedAt
+              const timeSinceCreation = now - (shapeCreatedAt as number)
               
               if (timeSinceCreation > 3000) {
                 // Shape is older than 3 seconds, fade it out immediately
@@ -74,26 +74,88 @@ const RedDrawOverride: React.FC = () => {
     // Apply glow to existing shapes immediately
     setTimeout(applyGlowToExistingShapes, 100)
 
-    // Override draw shape creation to make them red when pointer tool is active
+    // Add CSS to force all draw shapes to render outside frame boundaries
+    const addFrameClippingOverride = () => {
+      const style = document.createElement('style')
+      style.textContent = `
+        /* Force all draw shapes to render outside frame boundaries */
+        [data-shape-type="draw"] {
+          position: absolute !important;
+          z-index: 9999 !important;
+          overflow: visible !important;
+          clip-path: none !important;
+        }
+        
+        /* Ensure draw shapes inside frames are not clipped */
+        .tl-frame [data-shape-type="draw"] {
+          position: absolute !important;
+          z-index: 9999 !important;
+          overflow: visible !important;
+          clip-path: none !important;
+          transform: translateZ(0) !important;
+        }
+        
+        /* Force SVG elements inside draw shapes to be visible */
+        [data-shape-type="draw"] svg {
+          overflow: visible !important;
+          clip-path: none !important;
+        }
+        
+        /* Override any frame clipping masks for draw shapes */
+        .tl-frame [data-shape-type="draw"] svg {
+          overflow: visible !important;
+          clip-path: none !important;
+        }
+        
+        /* Ensure draw shapes are rendered at the root level visually */
+        [data-shape-type="draw"] {
+          isolation: isolate !important;
+          contain: none !important;
+        }
+      `
+      document.head.appendChild(style)
+      
+      return () => {
+        if (document.head.contains(style)) {
+          document.head.removeChild(style)
+        }
+      }
+    }
+
+    const removeStyle = addFrameClippingOverride()
+
+    // Use tldraw's side effects API to prevent frame parenting as a backup
+    const unregisterBeforeChangeHandler = editor.sideEffects.registerBeforeChangeHandler('shape', (prev, next) => {
+      // Check if the shape is a draw shape and its parent is a frame
+      if (next.type === 'draw' && next.parentId) {
+        const parentShape = editor.getShape(next.parentId)
+        if (parentShape && parentShape.type === 'frame') {
+          console.log(`Preventing draw shape ${next.id} from being parented to frame ${next.parentId}`)
+          // Set the parentId to the pageId to place the shape at the root level
+          return { ...next, parentId: editor.getCurrentPageId() }
+        }
+      }
+      return next
+    })
+
+    // Override the createShapes method to add pointer drawing properties
     const originalCreateShapes = editor.createShapes
     
     editor.createShapes = (shapes) => {
       const newShapes = shapes.map(shape => {
-        // Check if we're in pointer mode and this is a draw shape
+        // If we're in pointer mode and this is a draw shape, add special properties
         if (shape.type === 'draw' && (window as any).isPointerMode) {
           return {
             ...shape,
             props: {
               ...shape.props,
               color: 'white', // White stroke
-              // Add glow effect properties
               size: 'l', // Large size for better glow visibility
             },
-            // Add custom class for CSS targeting
             meta: {
               ...shape.meta,
               isPointerDrawing: true,
-              pointerCreatedAt: Date.now(), // Store creation timestamp
+              pointerCreatedAt: Date.now(),
             },
           }
         }
@@ -133,8 +195,10 @@ const RedDrawOverride: React.FC = () => {
                     const deleteTimeout = setTimeout(() => {
                       console.log(`Deleting new shape ${shape.id}`)
                       try {
-                        editor.deleteShape(shape.id)
-                        processedShapes.delete(shape.id) // Clean up tracking
+                        if (shape.id) {
+                          editor.deleteShape(shape.id)
+                          processedShapes.delete(shape.id) // Clean up tracking
+                        }
                       } catch (error) {
                         console.log(`Shape ${shape.id} already deleted`)
                       }
@@ -151,8 +215,10 @@ const RedDrawOverride: React.FC = () => {
     }
 
     return () => {
-      // Restore original method
+      // Clean up
+      unregisterBeforeChangeHandler()
       editor.createShapes = originalCreateShapes
+      removeStyle()
     }
   }, [editor])
 

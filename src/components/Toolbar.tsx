@@ -41,9 +41,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
       // If we're using the custom rectangle tool, keep rectangle selected
       if (tool === 'customRectangle') {
         setCurrentTool('rectangle')
-      } else if (tool === 'draw' && (window as any).isPointerMode) {
-        // If we're using draw tool but in pointer mode, keep pointer selected
+      } else if (tool === 'customDraw' && (window as any).isPointerMode) {
+        // If we're using custom draw tool but in pointer mode, keep pointer selected
         setCurrentTool('pointer')
+      } else if (tool === 'customDraw') {
+        // If we're using custom draw tool, show as draw
+        setCurrentTool('draw')
       } else {
         // For other tools, update normally
         setCurrentTool(tool)
@@ -92,10 +95,15 @@ const Toolbar: React.FC<ToolbarProps> = ({
       editor.setCurrentTool('frame')
       setCurrentTool(tool)
     } else if (tool === 'pointer') {
-      // For pointer tool, use the draw tool but with red color
+      // For pointer tool, use the custom draw tool but with red color
       ;(window as any).isPointerMode = true
-      editor.setCurrentTool('draw')
+      editor.setCurrentTool('customDraw')
       setCurrentTool('pointer')
+    } else if (tool === 'draw') {
+      // For regular draw tool, use the custom draw tool
+      ;(window as any).isPointerMode = false
+      editor.setCurrentTool('customDraw')
+      setCurrentTool('draw')
     } else {
       // Reset pointer mode for all other tools
       ;(window as any).isPointerMode = false

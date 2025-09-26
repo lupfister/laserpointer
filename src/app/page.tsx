@@ -6,6 +6,7 @@ import Toolbar from '@/components/Toolbar'
 import CustomFrame from '@/components/CustomFrame'
 import { CustomRectangleShapeUtil, customRectangleShapeProps } from '@/components/CustomRectangleShape'
 import { CustomRectangleTool } from '@/components/CustomRectangleTool'
+import { CustomDrawTool } from '@/components/CustomDrawTool'
 import RedDrawOverride from '@/components/RedDrawOverride'
 
 export default function Home() {
@@ -20,7 +21,7 @@ export default function Home() {
           hideUi
           className="w-full h-full"
           shapeUtils={[CustomRectangleShapeUtil]}
-          tools={[CustomRectangleTool]}
+          tools={[CustomRectangleTool, CustomDrawTool]}
           onMount={(editor) => {
             // Set initial tool
             editor.setCurrentTool('select')
